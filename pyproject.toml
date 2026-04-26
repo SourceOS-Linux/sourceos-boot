@@ -1,0 +1,9 @@
+[project]
+name = "sourceos-boot"
+version = "0.1.0"
+description = "SourceOS Boot/Recovery: BootReleaseSet, secure live boot, rollback, and nlboot evolution."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
