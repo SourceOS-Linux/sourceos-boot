@@ -37,3 +37,49 @@ def test_adapter_builds_announce_fetch_and_evidence() -> None:
         "selected-channel",
         "boot-mode",
     ]
+
+
+def test_adapter_maps_nlboot_manifest_and_token() -> None:
+    adapter = SourceOSBootAdapter()
+    token_doc = {
+        "token_id": "token-1",
+        "purpose": "recovery",
+        "expires_at": "2026-04-26T01:00:00Z",
+        "release_set_ref": "release/demo",
+        "boot_release_set_ref": "boot/demo",
+    }
+    manifest_doc = {
+        "manifest_id": "manifest-1",
+        "boot_release_set_id": "boot/demo",
+        "base_release_set_ref": "release/demo",
+        "boot_mode": "recovery",
+        "artifacts": {
+            "kernel_ref": "https://example.invalid/kernel",
+            "initrd_ref": "https://example.invalid/initrd",
+            "rootfs_ref": "https://example.invalid/rootfs",
+        },
+        "signature_ref": "urn:srcos:signature:demo",
+        "signer_ref": "trusted-key-1",
+        "signature_algorithm": "rsa-pss-sha256",
+        "crypto_profile": "fips-140-3-compatible",
+    }
+
+    authorization = adapter.authorization_from_nlboot_token(token_doc, correlation_id="corr-2")
+    patch = adapter.boot_release_set_patch_from_nlboot_manifest(manifest_doc)
+    evidence = adapter.build_evidence_from_nlboot_manifest(
+        claim=DeviceClaim("device-1", "sha256:demo", "apple-silicon", "nonce"),
+        authorization=authorization,
+        manifest_doc=manifest_doc,
+        manifest_hash="sha256:manifest",
+        verification_result="pass",
+    )
+
+    assert authorization.boot_release_set_ref == "boot/demo"
+    assert patch["releaseSetRef"] == "release/demo"
+    assert patch["channels"] == ["recovery"]
+    assert patch["artifacts"][0]["role"] == "kernel"
+    assert patch["signature"]["bundleRef"] == "urn:srcos:signature:demo"
+    assert patch["provenance"]["builderId"] == "trusted-key-1"
+    assert "repair" in patch["policy"]["allowedActions"]
+    assert evidence.selected_channel == "recovery"
+    assert evidence.boot_mode == "recovery"
