@@ -1,0 +1,15 @@
+{
+  "manifest_id": "manifest-demo-1",
+  "boot_release_set_id": "boot/demo",
+  "base_release_set_ref": "release/demo",
+  "boot_mode": "recovery",
+  "artifacts": {
+    "kernel_ref": "https://example.invalid/kernel",
+    "initrd_ref": "https://example.invalid/initrd",
+    "rootfs_ref": "https://example.invalid/rootfs"
+  },
+  "signature_ref": "urn:srcos:signature:demo",
+  "signer_ref": "trusted-key-1",
+  "signature_algorithm": "rsa-pss-sha256",
+  "crypto_profile": "fips-140-3-compatible"
+}
