@@ -1,5 +1,5 @@
 {
-  "apiVersion": "sourceos.dev/v0",
+  "apiVersion": "sourceos.dev/v1",
   "kind": "BootReleaseSet",
   "metadata": {
     "name": "sourceos-recovery-demo",
@@ -37,10 +37,36 @@
       "network": "enrollment-only",
       "diskWrite": "recovery-only",
       "tokenRequired": true,
-      "allowedActions": ["announce", "enroll", "fetch", "verify", "install", "rollback", "repair", "rekey"]
+      "allowedActions": ["announce", "enroll", "fetch", "verify", "install", "rollback", "repair", "rekey", "attest"]
     },
     "evidence": {
-      "requiredReports": ["device-claim", "manifest-hash", "verification-result", "selected-channel", "boot-mode", "install-result", "rollback-result"]
+      "correlationId": "boot-demo-0001",
+      "requiredReports": ["device-claim", "manifest-hash", "verification-result", "selected-channel", "boot-mode", "install-result", "rollback-result", "measurement", "attestation"]
+    },
+    "provenance": {
+      "builderId": "sourceos-boot-demo-builder",
+      "sourceRefs": ["git:local/sourceos-boot#feature/world-class-v1-contracts"],
+      "attestations": ["slsa", "in-toto"]
+    },
+    "trust": {
+      "model": "tuf",
+      "rootRef": "trust-root-demo",
+      "metadataRef": "tuf-metadata-demo",
+      "threshold": 1
+    },
+    "signature": {
+      "type": "sigstore",
+      "bundleRef": "sigstore-bundle-demo",
+      "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "antiRollback": {
+      "minimumVersion": "0.1.0",
+      "allowOfflineFallback": true,
+      "allowedRollbackRefs": ["prophet-lattice/releases/sourceos-demo/0.0.1"]
+    },
+    "telemetry": {
+      "traceRequired": true,
+      "metricSet": ["boot-duration", "verify-duration", "download-bytes", "action-result"]
     }
   }
 }
