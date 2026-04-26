@@ -1,0 +1,46 @@
+{
+  "apiVersion": "sourceos.dev/v0",
+  "kind": "BootReleaseSet",
+  "metadata": {
+    "name": "sourceos-recovery-demo",
+    "version": "0.1.0",
+    "createdAt": "2026-04-26T00:00:00Z",
+    "labels": {
+      "surface": "fog-boot",
+      "platform": "apple-silicon",
+      "stage": "demo"
+    }
+  },
+  "spec": {
+    "releaseSetRef": "prophet-lattice/releases/sourceos-demo/0.1.0",
+    "platforms": ["apple-silicon"],
+    "channels": ["live", "installer", "recovery", "rollback"],
+    "artifacts": [
+      {
+        "name": "sourceos-recovery-initrd",
+        "role": "initrd",
+        "uri": "https://example.invalid/sourceos/recovery/0.1.0/initrd.img",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream"
+      },
+      {
+        "name": "sourceos-recovery-manifest",
+        "role": "manifest",
+        "uri": "https://example.invalid/sourceos/recovery/0.1.0/manifest.json",
+        "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "sizeBytes": 0,
+        "contentType": "application/json"
+      }
+    ],
+    "policy": {
+      "network": "enrollment-only",
+      "diskWrite": "recovery-only",
+      "tokenRequired": true,
+      "allowedActions": ["announce", "enroll", "fetch", "verify", "install", "rollback", "repair", "rekey"]
+    },
+    "evidence": {
+      "requiredReports": ["device-claim", "manifest-hash", "verification-result", "selected-channel", "boot-mode", "install-result", "rollback-result"]
+    }
+  }
+}
