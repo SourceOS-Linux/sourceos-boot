@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -72,6 +73,8 @@ def test_rejects_non_ready_boot_release_set() -> None:
 
 
 def test_cli_plans_control_plane_boot_release_set() -> None:
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(ROOT / "src")
     result = subprocess.run(
         [
             sys.executable,
@@ -82,6 +85,7 @@ def test_cli_plans_control_plane_boot_release_set() -> None:
             str(FIXTURE),
         ],
         cwd=ROOT,
+        env=env,
         text=True,
         capture_output=True,
         check=True,
