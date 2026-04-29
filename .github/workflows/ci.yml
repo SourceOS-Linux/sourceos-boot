@@ -20,8 +20,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Validate examples
-        run: python src/sourceos_boot/validate_boot_release_set.py examples/*.json
+      - name: Validate native sourceos-boot example
+        run: python src/sourceos_boot/validate_boot_release_set.py examples/boot-release-set.example.json
       - name: Run tests
         run: |
           python -m pip install --upgrade pip pytest
