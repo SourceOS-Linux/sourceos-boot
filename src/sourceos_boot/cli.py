@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from .adapter import DeviceClaim, SourceOSBootAdapter
+from .control_plane import build_control_plane_boot_plan
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -57,6 +58,18 @@ def adapt_nlboot(args: argparse.Namespace) -> int:
     return 0
 
 
+def plan_control_plane(args: argparse.Namespace) -> int:
+    boot_release_set_doc = load_json(args.boot_release_set)
+    plan = build_control_plane_boot_plan(boot_release_set_doc)
+    output = {
+        "apiVersion": "sourceos.dev/v1",
+        "kind": "ControlPlaneBootPlan",
+        "plan": plan.to_dict(),
+    }
+    print(json.dumps(output, indent=2, sort_keys=True))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="SourceOS Boot helpers")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -71,6 +84,13 @@ def build_parser() -> argparse.ArgumentParser:
     adapt.add_argument("--correlation-id", required=True)
     adapt.add_argument("--verification-result", choices=["pass", "fail", "unknown"], default="pass")
     adapt.set_defaults(func=adapt_nlboot)
+
+    plan = subparsers.add_parser(
+        "plan-control-plane",
+        help="Build a safe, non-mutating boot plan from a sourceos-spec control-plane BootReleaseSet",
+    )
+    plan.add_argument("--boot-release-set", type=Path, required=True)
+    plan.set_defaults(func=plan_control_plane)
     return parser
 
 
