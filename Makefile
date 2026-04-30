@@ -2,6 +2,9 @@
 
 validate:
 	python src/sourceos_boot/validate_boot_release_set.py examples/boot-release-set.example.json
+	python src/sourceos_boot/validate_boot_release_set.py \
+	  examples/m2-recovery-installer/normal-boot.example.json \
+	  examples/m2-recovery-installer/recovery-installer.example.json
 	PYTHONPATH=src python -m sourceos_boot.cli adapt-nlboot \
 	  --manifest examples/nlboot/manifest.json \
 	  --token examples/nlboot/token.json \

@@ -1,0 +1,100 @@
+{
+  "apiVersion": "sourceos.dev/v1",
+  "kind": "BootReleaseSet",
+  "metadata": {
+    "name": "sourceos-m2-recovery-installer-demo",
+    "version": "0.1.0",
+    "createdAt": "2026-04-30T00:00:00Z",
+    "labels": {
+      "surface": "fog-boot",
+      "platform": "apple-silicon",
+      "stage": "demo",
+      "entry-type": "recovery-installer"
+    }
+  },
+  "spec": {
+    "releaseSetRef": "prophet-lattice/releases/sourceos-m2-recovery-demo/0.1.0",
+    "platforms": ["apple-silicon"],
+    "channels": ["recovery", "installer"],
+    "artifacts": [
+      {
+        "name": "sourceos-m2-recovery-kernel",
+        "role": "kernel",
+        "uri": "https://example.invalid/sourceos/m2/recovery/0.1.0/kernel",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000011",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream"
+      },
+      {
+        "name": "sourceos-m2-recovery-initrd",
+        "role": "initrd",
+        "uri": "https://example.invalid/sourceos/m2/recovery/0.1.0/initrd.img",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000012",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream"
+      },
+      {
+        "name": "sourceos-m2-recovery-image",
+        "role": "recovery-image",
+        "uri": "https://example.invalid/sourceos/m2/recovery/0.1.0/recovery.img",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000013",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream"
+      },
+      {
+        "name": "sourceos-m2-installer-data",
+        "role": "installer-data",
+        "uri": "https://example.invalid/sourceos/m2/recovery/0.1.0/installer-data.json",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000014",
+        "sizeBytes": 0,
+        "contentType": "application/json"
+      },
+      {
+        "name": "sourceos-m2-recovery-manifest",
+        "role": "manifest",
+        "uri": "https://example.invalid/sourceos/m2/recovery/0.1.0/manifest.json",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000015",
+        "sizeBytes": 0,
+        "contentType": "application/json"
+      }
+    ],
+    "policy": {
+      "network": "enrollment-only",
+      "diskWrite": "installer-only",
+      "tokenRequired": true,
+      "allowedActions": ["announce", "enroll", "fetch", "verify", "install", "repair", "rollback", "rekey", "attest"]
+    },
+    "evidence": {
+      "correlationId": "m2-recovery-installer-demo-0001",
+      "requiredReports": ["device-claim", "manifest-hash", "verification-result", "selected-channel", "boot-mode", "install-result", "rollback-result", "measurement", "attestation"]
+    },
+    "provenance": {
+      "builderId": "sourceos-m2-recovery-demo-builder",
+      "sourceRefs": [
+        "git:SourceOS-Linux/sourceos-boot#main",
+        "git:SourceOS-Linux/sourceos-spec#main"
+      ],
+      "attestations": ["slsa", "in-toto"]
+    },
+    "trust": {
+      "model": "tuf",
+      "rootRef": "trust-root-m2-recovery-demo",
+      "metadataRef": "tuf-metadata-m2-recovery-demo",
+      "threshold": 1
+    },
+    "signature": {
+      "type": "sigstore",
+      "bundleRef": "sigstore-bundle-m2-recovery-installer-demo",
+      "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000020"
+    },
+    "antiRollback": {
+      "minimumVersion": "0.1.0",
+      "allowOfflineFallback": true,
+      "allowedRollbackRefs": ["prophet-lattice/releases/sourceos-m2-recovery-demo/0.0.1"]
+    },
+    "telemetry": {
+      "traceRequired": true,
+      "metricSet": ["boot-duration", "verify-duration", "download-bytes", "action-result"]
+    }
+  }
+}
