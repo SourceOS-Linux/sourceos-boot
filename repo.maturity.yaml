@@ -1,0 +1,49 @@
+schemaVersion: repo-maturity.v1
+repository: SourceOS-Linux/sourceos-boot
+plane: sourceos-carry
+status: active
+canonicality: implementation
+owners:
+  - SourceOS-Linux
+maturity:
+  level: M2
+  targetLevel: M3
+  evidence:
+    - README.md describes the BootReleaseSet model and boot/recovery surface.
+    - schemas/boot-release-set.schema.json is the BootReleaseSet v1 contract.
+    - examples/boot-release-set.example.json is a minimal valid fixture.
+    - examples/nlboot/ contains nlboot manifest, token, and adapted-output fixtures.
+    - src/sourceos_boot/adapter.py implements the nlboot-to-BootReleaseSet adapter.
+    - src/sourceos_boot/control_plane.py implements the control-plane boot plan builder.
+    - make validate exercises schema validation and the nlboot adapter CLI path.
+    - python -m pytest passes all tests.
+validation:
+  commands:
+    - make validate
+    - python -m pytest
+  ciRequired: true
+  lastKnownStatus: passing
+integrations:
+  - repository: SociOS-Linux/nlboot
+    relationship: upstream safe planner; sourceos-boot adapts nlboot manifest/token/plan into BootReleaseSet and evidence contracts
+    required: true
+  - repository: SourceOS-Linux/sourceos-spec
+    relationship: should consume normative BootReleaseSet, ReleaseSet, TokenDoor, and Fingerprint schemas once published
+    required: true
+  - repository: SocioProphet/prophet-platform
+    relationship: downstream release service and control-plane UI consumer of BootReleaseSet artifacts
+    required: false
+  - repository: SocioProphet/lattice-forge
+    relationship: downstream runtime/image/kernel artifact producer referenced by BootReleaseSet
+    required: false
+  - repository: SocioProphet/agentplane
+    relationship: downstream agent-plane recovery and runtime repair consumer
+    required: false
+nextActions:
+  - Wire nlboot RSA-PSS/SHA-256 manifest signature verification into the adapter.
+  - Add Apple Silicon M2 platform adaptation layer (PAL) design notes and stubs.
+  - Add UEFI/iPXE PAL design notes for PC/Purism class hardware.
+  - Align BootReleaseSet v1 with sourceos-spec once shared schemas land.
+  - Add enrollment-token exchange stub with control-plane endpoint.
+  - Add artifact digest verification and content-addressed cache path.
+  - Emit evidence records from the boot/recovery execution boundary.
