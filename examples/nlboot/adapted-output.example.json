@@ -1,0 +1,76 @@
+{
+  "apiVersion": "sourceos.dev/v1",
+  "kind": "NlbootAdapterOutput",
+  "authorization": {
+    "bootReleaseSetRef": "boot/demo",
+    "correlationId": "corr-demo-1",
+    "expiresAt": "2026-04-26T01:00:00Z",
+    "tokenId": "token-demo-1"
+  },
+  "bootReleaseSetPatch": {
+    "artifacts": [
+      {
+        "name": "kernel",
+        "role": "kernel",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "uri": "https://example.invalid/kernel"
+      },
+      {
+        "name": "initrd",
+        "role": "initrd",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "uri": "https://example.invalid/initrd"
+      },
+      {
+        "name": "rootfs",
+        "role": "rootfs",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "uri": "https://example.invalid/rootfs"
+      }
+    ],
+    "channels": [
+      "recovery"
+    ],
+    "policy": {
+      "allowedActions": [
+        "announce",
+        "enroll",
+        "fetch",
+        "verify",
+        "repair",
+        "attest"
+      ]
+    },
+    "provenance": {
+      "attestations": [
+        "slsa",
+        "in-toto"
+      ],
+      "builderId": "trusted-key-1",
+      "sourceRefs": [
+        "manifest-demo-1"
+      ]
+    },
+    "releaseSetRef": "release/demo",
+    "signature": {
+      "bundleRef": "urn:srcos:signature:demo",
+      "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "type": "x509"
+    }
+  },
+  "evidence": {
+    "bootMode": "recovery",
+    "correlationId": "corr-demo-1",
+    "deviceId": "device-demo-m2",
+    "manifestHash": "sha256:b5014e848fc8ce3acd28a7cc8c2435340bf3871647d298bec102fb7dbe737e1a",
+    "reports": [
+      "device-claim",
+      "manifest-hash",
+      "verification-result",
+      "selected-channel",
+      "boot-mode"
+    ],
+    "selectedChannel": "recovery",
+    "verificationResult": "pass"
+  }
+}
