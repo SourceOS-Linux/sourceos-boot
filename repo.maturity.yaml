@@ -20,6 +20,9 @@ maturity:
     - src/sourceos_boot/control_plane.py implements the control-plane boot plan builder.
     - make validate exercises schema validation, new M2 fixtures, and the nlboot adapter CLI path.
     - python -m pytest passes all tests.
+    - docs/APPLE_SILICON_EVIDENCE_NORMALIZATION.md defines the normalization design for AppleSiliconAdapterEvidence into BootEvidence/BootProofRecord.
+    - examples/apple-silicon-evidence/raw-apple-silicon-evidence.example.json is a dry-run raw AppleSiliconAdapterEvidence fixture.
+    - examples/apple-silicon-evidence/normalized-boot-evidence.example.json is a dry-run normalized BootEvidence fixture showing the output of normalise_apple_silicon_evidence().
 validation:
   commands:
     - make validate
@@ -44,7 +47,7 @@ integrations:
     required: false
 nextActions:
   - Wire nlboot RSA-PSS/SHA-256 manifest signature verification into the adapter.
-  - Implement AppleSiliconAdapterEvidence normalization (Secure Enclave / SEP device claim).
+  - Implement normalise_apple_silicon_evidence() in adapter.py (design doc in docs/APPLE_SILICON_EVIDENCE_NORMALIZATION.md; requires SEP integration review before host-mutating behavior).
   - Add UEFI/iPXE PAL design notes for PC/Purism class hardware.
   - Align BootReleaseSet v1 with sourceos-spec once shared schemas land.
   - Add enrollment-token exchange stub with control-plane endpoint.

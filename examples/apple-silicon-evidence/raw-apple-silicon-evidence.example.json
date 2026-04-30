@@ -1,0 +1,20 @@
+{
+  "apiVersion": "sourceos.dev/v1",
+  "kind": "AppleSiliconAdapterEvidence",
+  "_dryRun": true,
+  "_comment": "Dry-run fixture only. No Secure Enclave calls, host mutation, or disk writes are performed.",
+  "deviceClaim": {
+    "deviceId": "m2-demo-device-001",
+    "publicKeyFingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+    "platform": "apple-silicon",
+    "nonce": "nonce-apple-silicon-demo-1",
+    "observedAt": "2026-04-30T00:00:00Z"
+  },
+  "secureEnclaveFingerprint": "sep:sha256:0000000000000000000000000000000000000000000000000000000000000002",
+  "bootNonce": "boot-nonce-apple-silicon-demo-1",
+  "measurementDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000003",
+  "chipId": "Apple M2",
+  "boardId": "0x00",
+  "bootMode": "bootstrap",
+  "correlationId": "corr-apple-silicon-demo-1"
+}

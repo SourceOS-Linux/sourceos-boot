@@ -1,0 +1,54 @@
+{
+  "apiVersion": "sourceos.dev/v1",
+  "kind": "NormalizedAppleSiliconBootEvidence",
+  "_dryRun": true,
+  "_comment": "Dry-run fixture only. Represents the output of normalise_apple_silicon_evidence(). No Secure Enclave calls, host mutation, or disk writes are performed.",
+  "input": {
+    "ref": "examples/apple-silicon-evidence/raw-apple-silicon-evidence.example.json",
+    "kind": "AppleSiliconAdapterEvidence"
+  },
+  "bootEvidence": {
+    "correlationId": "corr-apple-silicon-demo-1",
+    "deviceId": "m2-demo-device-001",
+    "selectedChannel": "live",
+    "bootMode": "bootstrap",
+    "manifestHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "verificationResult": "pass",
+    "reports": [
+      "device-claim",
+      "manifest-hash",
+      "verification-result",
+      "selected-channel",
+      "boot-mode",
+      "measurement"
+    ]
+  },
+  "normalizedReports": {
+    "device-claim": {
+      "deviceId": "m2-demo-device-001",
+      "publicKeyFingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+      "platform": "apple-silicon",
+      "nonce": "nonce-apple-silicon-demo-1",
+      "observedAt": "2026-04-30T00:00:00Z"
+    },
+    "measurement": {
+      "source": "apple-silicon-sep",
+      "secureEnclaveFingerprint": "sep:sha256:0000000000000000000000000000000000000000000000000000000000000002",
+      "bootNonce": "boot-nonce-apple-silicon-demo-1",
+      "measurementDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000003",
+      "chipId": "Apple M2",
+      "boardId": "0x00",
+      "dryRun": true
+    }
+  },
+  "bootProofRecordPatch": {
+    "requiredReports": [
+      "device-claim",
+      "manifest-hash",
+      "verification-result",
+      "selected-channel",
+      "boot-mode",
+      "measurement"
+    ]
+  }
+}
