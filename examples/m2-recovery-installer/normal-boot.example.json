@@ -1,0 +1,100 @@
+{
+  "apiVersion": "sourceos.dev/v1",
+  "kind": "BootReleaseSet",
+  "metadata": {
+    "name": "sourceos-m2-normal-boot-demo",
+    "version": "0.1.0",
+    "createdAt": "2026-04-30T00:00:00Z",
+    "labels": {
+      "surface": "fog-boot",
+      "platform": "apple-silicon",
+      "stage": "demo",
+      "entry-type": "normal-boot"
+    }
+  },
+  "spec": {
+    "releaseSetRef": "prophet-lattice/releases/sourceos-m2-demo/0.1.0",
+    "platforms": ["apple-silicon"],
+    "channels": ["live"],
+    "artifacts": [
+      {
+        "name": "sourceos-m2-kernel",
+        "role": "kernel",
+        "uri": "https://example.invalid/sourceos/m2/0.1.0/kernel",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream"
+      },
+      {
+        "name": "sourceos-m2-initrd",
+        "role": "initrd",
+        "uri": "https://example.invalid/sourceos/m2/0.1.0/initrd.img",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000002",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream"
+      },
+      {
+        "name": "sourceos-m2-rootfs",
+        "role": "rootfs",
+        "uri": "https://example.invalid/sourceos/m2/0.1.0/rootfs.img",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000003",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream"
+      },
+      {
+        "name": "sourceos-m2-bootloader",
+        "role": "bootloader",
+        "uri": "https://example.invalid/sourceos/m2/0.1.0/m1n1-uboot-chain.bin",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000004",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream"
+      },
+      {
+        "name": "sourceos-m2-manifest",
+        "role": "manifest",
+        "uri": "https://example.invalid/sourceos/m2/0.1.0/manifest.json",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000005",
+        "sizeBytes": 0,
+        "contentType": "application/json"
+      }
+    ],
+    "policy": {
+      "network": "enrollment-only",
+      "diskWrite": "forbidden",
+      "tokenRequired": true,
+      "allowedActions": ["announce", "enroll", "fetch", "verify", "attest"]
+    },
+    "evidence": {
+      "correlationId": "m2-normal-boot-demo-0001",
+      "requiredReports": ["device-claim", "manifest-hash", "verification-result", "selected-channel", "boot-mode", "measurement", "attestation"]
+    },
+    "provenance": {
+      "builderId": "sourceos-m2-demo-builder",
+      "sourceRefs": [
+        "git:SourceOS-Linux/sourceos-boot#main",
+        "git:SourceOS-Linux/sourceos-spec#main"
+      ],
+      "attestations": ["slsa", "in-toto"]
+    },
+    "trust": {
+      "model": "tuf",
+      "rootRef": "trust-root-m2-demo",
+      "metadataRef": "tuf-metadata-m2-demo",
+      "threshold": 1
+    },
+    "signature": {
+      "type": "sigstore",
+      "bundleRef": "sigstore-bundle-m2-normal-boot-demo",
+      "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000010"
+    },
+    "antiRollback": {
+      "minimumVersion": "0.1.0",
+      "allowOfflineFallback": true,
+      "allowedRollbackRefs": []
+    },
+    "telemetry": {
+      "traceRequired": true,
+      "metricSet": ["boot-duration", "verify-duration", "download-bytes", "action-result"]
+    }
+  }
+}
