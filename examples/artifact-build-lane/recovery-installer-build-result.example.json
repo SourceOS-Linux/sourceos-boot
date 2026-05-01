@@ -1,0 +1,159 @@
+{
+  "apiVersion": "sourceos.dev/v1",
+  "kind": "ArtifactBuildLaneResult",
+  "_dryRun": true,
+  "_comment": "Dry-run fixture only. No artifact build, upload, signing, or publishing is performed. All SHA-256 values are placeholder zeros. SBOM proof for NLBoot RC is pending.",
+  "metadata": {
+    "name": "sourceos-recovery-installer-build-lane-demo",
+    "version": "0.1.0",
+    "createdAt": "2026-05-01T00:00:00Z",
+    "lane": "recovery-installer",
+    "labels": {
+      "platform": "apple-silicon",
+      "stage": "dry-run",
+      "entry-type": "recovery-installer"
+    }
+  },
+  "spec": {
+    "dryRun": true,
+    "execute": false,
+    "platforms": ["apple-silicon", "uefi-x86_64", "generic-arm64"],
+    "nlbootRef": {
+      "repository": "SociOS-Linux/nlboot",
+      "status": "release-candidate",
+      "note": "No tagged release published. SBOM proof in progress. Adapter consumes nlboot safe plan with execute=false."
+    },
+    "sbomStatus": "pending",
+    "artifacts": [
+      {
+        "class": "bootstrap-payload",
+        "name": "sourceos-m2-bootstrap",
+        "description": "First-stage loader chain: m1n1 + U-Boot for M2 Apple Silicon.",
+        "role": "bootloader",
+        "platforms": ["apple-silicon"],
+        "uri": "https://example.invalid/build/sourceos/m2/0.1.0/bootstrap.bin",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000031",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream",
+        "sbomRef": "https://example.invalid/build/sourceos/m2/0.1.0/bootstrap.spdx.json",
+        "provenanceRef": "https://example.invalid/build/sourceos/m2/0.1.0/bootstrap.intoto.jsonl"
+      },
+      {
+        "class": "recovery-kernel",
+        "name": "sourceos-m2-recovery-kernel",
+        "description": "Recovery-mode Linux kernel image.",
+        "role": "kernel",
+        "platforms": ["apple-silicon", "uefi-x86_64", "generic-arm64"],
+        "uri": "https://example.invalid/build/sourceos/m2/0.1.0/recovery-kernel",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000032",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream",
+        "sbomRef": "https://example.invalid/build/sourceos/m2/0.1.0/recovery-kernel.spdx.json",
+        "provenanceRef": "https://example.invalid/build/sourceos/m2/0.1.0/recovery-kernel.intoto.jsonl"
+      },
+      {
+        "class": "recovery-initrd",
+        "name": "sourceos-m2-recovery-initrd",
+        "description": "Recovery initramfs containing early userspace for the recovery environment.",
+        "role": "initrd",
+        "platforms": ["apple-silicon", "uefi-x86_64", "generic-arm64"],
+        "uri": "https://example.invalid/build/sourceos/m2/0.1.0/recovery-initrd.img",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000033",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream",
+        "sbomRef": "https://example.invalid/build/sourceos/m2/0.1.0/recovery-initrd.spdx.json",
+        "provenanceRef": "https://example.invalid/build/sourceos/m2/0.1.0/recovery-initrd.intoto.jsonl"
+      },
+      {
+        "class": "recovery-payload",
+        "name": "sourceos-m2-recovery-image",
+        "description": "Compressed recovery root filesystem image containing repair tooling and rollback scripts.",
+        "role": "recovery-image",
+        "platforms": ["apple-silicon", "uefi-x86_64", "generic-arm64"],
+        "uri": "https://example.invalid/build/sourceos/m2/0.1.0/recovery.img",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000034",
+        "sizeBytes": 0,
+        "contentType": "application/octet-stream",
+        "sbomRef": "https://example.invalid/build/sourceos/m2/0.1.0/recovery.spdx.json",
+        "provenanceRef": "https://example.invalid/build/sourceos/m2/0.1.0/recovery.intoto.jsonl"
+      },
+      {
+        "class": "installer-payload",
+        "name": "sourceos-m2-installer-data",
+        "description": "Installer data bundle: Asahi-style JSON + asset pack for M2; UEFI layout descriptor for generic targets.",
+        "role": "installer-data",
+        "platforms": ["apple-silicon", "uefi-x86_64", "generic-arm64"],
+        "uri": "https://example.invalid/build/sourceos/m2/0.1.0/installer-data.json",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000035",
+        "sizeBytes": 0,
+        "contentType": "application/json",
+        "sbomRef": "https://example.invalid/build/sourceos/m2/0.1.0/installer-data.spdx.json",
+        "provenanceRef": "https://example.invalid/build/sourceos/m2/0.1.0/installer-data.intoto.jsonl"
+      },
+      {
+        "class": "manifest",
+        "name": "sourceos-m2-build-manifest",
+        "description": "Signed artifact manifest listing all lane artifact digests for this build result.",
+        "role": "manifest",
+        "platforms": ["apple-silicon", "uefi-x86_64", "generic-arm64"],
+        "uri": "https://example.invalid/build/sourceos/m2/0.1.0/manifest.json",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000036",
+        "sizeBytes": 0,
+        "contentType": "application/json",
+        "sbomRef": null,
+        "provenanceRef": null
+      },
+      {
+        "class": "checksums",
+        "name": "sourceos-m2-sha256sums",
+        "description": "Detached SHA256SUMS file over all lane artifacts for offline verification.",
+        "role": "other",
+        "platforms": ["apple-silicon", "uefi-x86_64", "generic-arm64"],
+        "uri": "https://example.invalid/build/sourceos/m2/0.1.0/SHA256SUMS",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000037",
+        "sizeBytes": 0,
+        "contentType": "text/plain",
+        "sbomRef": null,
+        "provenanceRef": null
+      },
+      {
+        "class": "sbom-reference",
+        "name": "sourceos-m2-sbom",
+        "description": "SPDX SBOM document covering the full artifact set produced by this build lane.",
+        "role": "other",
+        "platforms": ["apple-silicon", "uefi-x86_64", "generic-arm64"],
+        "uri": "https://example.invalid/build/sourceos/m2/0.1.0/sourceos-m2-recovery-installer.spdx.json",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000038",
+        "sizeBytes": 0,
+        "contentType": "application/spdx+json",
+        "sbomRef": null,
+        "provenanceRef": null
+      },
+      {
+        "class": "provenance-reference",
+        "name": "sourceos-m2-provenance",
+        "description": "SLSA Build L2 + in-toto provenance bundle covering the full artifact set.",
+        "role": "other",
+        "platforms": ["apple-silicon", "uefi-x86_64", "generic-arm64"],
+        "uri": "https://example.invalid/build/sourceos/m2/0.1.0/sourceos-m2-recovery-installer.intoto.jsonl",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000039",
+        "sizeBytes": 0,
+        "contentType": "application/json",
+        "sbomRef": null,
+        "provenanceRef": null
+      }
+    ],
+    "provenance": {
+      "builderId": "sourceos-recovery-installer-lane-demo-builder",
+      "sourceRefs": [
+        "git:SourceOS-Linux/sourceos-boot#main",
+        "git:SociOS-Linux/nlboot#release-candidate"
+      ],
+      "attestations": ["slsa", "in-toto"],
+      "provenanceRef": "https://example.invalid/build/sourceos/m2/0.1.0/sourceos-m2-recovery-installer.intoto.jsonl"
+    },
+    "sbomRef": "https://example.invalid/build/sourceos/m2/0.1.0/sourceos-m2-recovery-installer.spdx.json",
+    "sigstoreBundleRef": "sigstore-bundle-sourceos-m2-recovery-installer-lane-demo",
+    "manifestDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000036"
+  }
+}
