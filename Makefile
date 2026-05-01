@@ -7,6 +7,7 @@ validate:
 	  examples/m2-recovery-installer/recovery-installer.example.json
 	python -m json.tool examples/apple-silicon-evidence/raw-apple-silicon-evidence.example.json > /dev/null
 	python -m json.tool examples/apple-silicon-evidence/normalized-boot-evidence.example.json > /dev/null
+	python -m json.tool examples/artifact-build-lane/recovery-installer-build-result.example.json > /dev/null
 	PYTHONPATH=src python -m sourceos_boot.cli adapt-nlboot \
 	  --manifest examples/nlboot/manifest.json \
 	  --token examples/nlboot/token.json \

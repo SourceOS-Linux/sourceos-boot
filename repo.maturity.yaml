@@ -18,11 +18,13 @@ maturity:
     - docs/M2_RECOVERY_INSTALLER_PACKAGING.md defines packaging responsibilities, required inputs, and evidence model for both M2 entry types.
     - src/sourceos_boot/adapter.py implements the nlboot-to-BootReleaseSet adapter.
     - src/sourceos_boot/control_plane.py implements the control-plane boot plan builder.
-    - make validate exercises schema validation, new M2 fixtures, and the nlboot adapter CLI path.
+    - make validate exercises schema validation, M2 fixtures, nlboot adapter CLI path, and the new artifact-build-lane fixture.
     - python -m pytest passes all tests.
     - docs/APPLE_SILICON_EVIDENCE_NORMALIZATION.md defines the normalization design for AppleSiliconAdapterEvidence into BootEvidence/BootProofRecord.
     - examples/apple-silicon-evidence/raw-apple-silicon-evidence.example.json is a dry-run raw AppleSiliconAdapterEvidence fixture.
     - examples/apple-silicon-evidence/normalized-boot-evidence.example.json is a dry-run normalized BootEvidence fixture showing the output of normalise_apple_silicon_evidence().
+    - docs/RECOVERY_INSTALLER_ARTIFACT_BUILD_LANE.md defines the artifact build lane for Recovery/Installer artifacts, including all required artifact classes, pipeline stages, SBOM/provenance references, and NLBoot RC status.
+    - examples/artifact-build-lane/recovery-installer-build-result.example.json is a dry-run ArtifactBuildLaneResult fixture covering bootstrap-payload, recovery-payload, installer-payload, manifest, checksums, sbom-reference, and provenance-reference artifact classes across M2 and generic platform targets.
 validation:
   commands:
     - make validate
@@ -54,3 +56,6 @@ nextActions:
   - Add artifact digest verification and content-addressed cache path.
   - Emit evidence records from the boot/recovery execution boundary.
   - Wire M2 packaging adapter to produce platform entrypoint descriptors from BootReleaseSet.
+  - Complete SBOM proof for NLBoot RC artifacts (sbomStatus is currently pending in artifact-build-lane fixture).
+  - Automate Sigstore/cosign signing of artifact-build-lane manifest once NLBoot RC is stable.
+  - Wire artifact-build-lane output into BootReleaseSet packaging step (spec.artifacts population from lane result).
