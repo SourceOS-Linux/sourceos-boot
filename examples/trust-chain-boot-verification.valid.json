@@ -1,0 +1,46 @@
+{
+  "schema_version": "0.1",
+  "evidence_id": "sourceos-boot:trust-chain-boot-verification:demo-m2-001",
+  "evidence_type": "TrustChainBootVerificationEvidence",
+  "boot_release_set_ref": "boot-release-set://sourceos/recovery-m2@0.1.0",
+  "device_claim": {
+    "device_id": "device-demo-m2",
+    "platform": "apple-silicon",
+    "claim_ref": "device-claim://sourceos/device-demo-m2/2026-06-01",
+    "claim_status": "verified"
+  },
+  "boot": {
+    "manifest_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "selected_release_set": "boot-release-set://sourceos/recovery-m2@0.1.0",
+    "boot_mode": "recovery"
+  },
+  "verification": {
+    "verification_result": "pass",
+    "attestation_ref": "attestation://sourceos-boot/device-demo-m2/recovery-m2-0.1.0"
+  },
+  "rollback_recovery": {
+    "rollback_available": true,
+    "recovery_available": true,
+    "rollback_ref": "rollback://sourceos/recovery-m2@0.0.9",
+    "recovery_ref": "recovery://sourceos/recovery-m2@0.1.0"
+  },
+  "trust_chain_refs": {
+    "policy_profile_ref": "policy://trust-chain/boot-admission/regulated-enterprise-production",
+    "admission_decision_ref": "trust-chain:admit-artifact-response:boot-release-set-demo-m2:allowed",
+    "runtime_receipt_ref": "runtime-receipt://sourceos-boot/demo-m2-001"
+  },
+  "decision": "verified",
+  "effects": {
+    "boot_allowed": true,
+    "install_allowed": true,
+    "rollback_allowed": true,
+    "repair_required": false,
+    "human_review_required": false
+  },
+  "remediation": [],
+  "non_claims": [
+    "This fixture does not certify production hardware by itself.",
+    "This fixture does not mutate live boot entries.",
+    "This fixture records boot/device verification evidence for Prophet Trust Chain admission."
+  ]
+}
