@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sourceos.dev/boot/trust-chain-boot-verification-evidence.v0.1.schema.json",
+  "title": "Trust Chain Boot Verification Evidence v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evidence_id", "evidence_type", "boot_release_set_ref", "device_claim", "boot", "verification", "rollback_recovery", "trust_chain_refs", "decision", "effects", "non_claims"],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "evidence_id": {"type": "string", "pattern": "^sourceos-boot:trust-chain-boot-verification:"},
+    "evidence_type": {"const": "TrustChainBootVerificationEvidence"},
+    "boot_release_set_ref": {"type": "string", "minLength": 1},
+    "device_claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["device_id", "platform", "claim_ref", "claim_status"],
+      "properties": {
+        "device_id": {"type": "string"},
+        "platform": {"enum": ["apple-silicon", "uefi-x86_64", "uefi-aarch64", "generic-arm64"]},
+        "claim_ref": {"type": ["string", "null"]},
+        "claim_status": {"enum": ["verified", "failed", "missing"]}
+      }
+    },
+    "boot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_hash", "selected_release_set", "boot_mode"],
+      "properties": {
+        "manifest_hash": {"type": ["string", "null"]},
+        "selected_release_set": {"type": ["string", "null"]},
+        "boot_mode": {"enum": ["normal", "recovery", "rollback", "rescue", "installer"]}
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verification_result", "attestation_ref"],
+      "properties": {
+        "verification_result": {"enum": ["pass", "fail", "not_run"]},
+        "attestation_ref": {"type": ["string", "null"]}
+      }
+    },
+    "rollback_recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rollback_available", "recovery_available", "rollback_ref", "recovery_ref"],
+      "properties": {
+        "rollback_available": {"type": "boolean"},
+        "recovery_available": {"type": "boolean"},
+        "rollback_ref": {"type": ["string", "null"]},
+        "recovery_ref": {"type": ["string", "null"]}
+      }
+    },
+    "trust_chain_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_profile_ref", "admission_decision_ref", "runtime_receipt_ref"],
+      "properties": {
+        "policy_profile_ref": {"type": ["string", "null"]},
+        "admission_decision_ref": {"type": ["string", "null"]},
+        "runtime_receipt_ref": {"type": ["string", "null"]}
+      }
+    },
+    "decision": {"enum": ["verified", "blocked", "review_required"]},
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["boot_allowed", "install_allowed", "rollback_allowed", "repair_required", "human_review_required"],
+      "properties": {
+        "boot_allowed": {"type": "boolean"},
+        "install_allowed": {"type": "boolean"},
+        "rollback_allowed": {"type": "boolean"},
+        "repair_required": {"type": "boolean"},
+        "human_review_required": {"type": "boolean"}
+      }
+    },
+    "remediation": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["step_id", "authority", "required_before_admission", "instruction"], "properties": {"step_id": {"type": "string"}, "authority": {"type": "string"}, "required_before_admission": {"type": "boolean"}, "instruction": {"type": "string"}}}},
+    "non_claims": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  }
+}
