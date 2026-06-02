@@ -1,0 +1,58 @@
+{
+  "schema_version": "0.1",
+  "evidence_id": "sourceos-boot:trust-chain-boot-verification:demo-m2-002",
+  "evidence_type": "TrustChainBootVerificationEvidence",
+  "boot_release_set_ref": "boot-release-set://sourceos/recovery-m2@0.1.0",
+  "device_claim": {
+    "device_id": "device-demo-m2",
+    "platform": "apple-silicon",
+    "claim_ref": null,
+    "claim_status": "missing"
+  },
+  "boot": {
+    "manifest_hash": null,
+    "selected_release_set": "boot-release-set://sourceos/recovery-m2@0.1.0",
+    "boot_mode": "recovery"
+  },
+  "verification": {
+    "verification_result": "fail",
+    "attestation_ref": null
+  },
+  "rollback_recovery": {
+    "rollback_available": true,
+    "recovery_available": true,
+    "rollback_ref": "rollback://sourceos/recovery-m2@0.0.9",
+    "recovery_ref": "recovery://sourceos/recovery-m2@0.1.0"
+  },
+  "trust_chain_refs": {
+    "policy_profile_ref": "policy://trust-chain/boot-admission/regulated-enterprise-production",
+    "admission_decision_ref": "trust-chain:admit-artifact-response:boot-release-set-demo-m2:denied",
+    "runtime_receipt_ref": null
+  },
+  "decision": "blocked",
+  "effects": {
+    "boot_allowed": false,
+    "install_allowed": false,
+    "rollback_allowed": true,
+    "repair_required": true,
+    "human_review_required": true
+  },
+  "remediation": [
+    {
+      "step_id": "verify-device-claim",
+      "authority": "SourceOS-Linux/sourceos-boot",
+      "required_before_admission": true,
+      "instruction": "Re-run device claim verification and bind a non-null claim reference before boot/install admission."
+    },
+    {
+      "step_id": "verify-manifest-hash",
+      "authority": "SourceOS-Linux/sourceos-boot",
+      "required_before_admission": true,
+      "instruction": "Recompute and verify the boot manifest hash before selecting the release set for admission."
+    }
+  ],
+  "non_claims": [
+    "This blocked fixture proves fail-closed behavior when device claim or manifest verification evidence is missing.",
+    "This fixture does not mutate live boot entries."
+  ]
+}
