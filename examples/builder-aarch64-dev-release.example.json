@@ -1,0 +1,85 @@
+{
+  "apiVersion": "sourceos.dev/v1",
+  "kind": "BootReleaseSet",
+  "metadata": {
+    "name": "sourceos-builder-aarch64-dev",
+    "version": "0.1.0",
+    "createdAt": "2026-06-16T00:00:00Z",
+    "labels": {
+      "surface": "local-katello",
+      "platform": "apple-silicon",
+      "stage": "dev",
+      "entry-type": "live",
+      "katello-content-view": "sourceos-builder-aarch64",
+      "lifecycle-env": "dev"
+    }
+  },
+  "spec": {
+    "releaseSetRef": "katello:SocioProphet/sourceos-builder-aarch64/dev",
+    "bootChain": {
+      "type": "asahi-m1n1-uboot-systemd-boot",
+      "asahi": {
+        "m1n1Version": "1.4.x",
+        "ubootVersion": "2024.01",
+        "efiVarsMutable": false,
+        "rollbackTarget": null
+      }
+    },
+    "platforms": ["apple-silicon"],
+    "channels": ["live"],
+    "artifacts": [
+      {
+        "name": "sourceos-builder-aarch64-closure",
+        "role": "rootfs",
+        "uri": "http://127.0.0.1:8101/socioprophet/content/sourceos/sourceos-closures-aarch64/builder-aarch64-0.1.0.nar.zst",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+        "sizeBytes": 0,
+        "contentType": "application/x-nix-nar"
+      },
+      {
+        "name": "sourceos-nix-cache-index",
+        "role": "manifest",
+        "uri": "http://127.0.0.1:8101/socioprophet/content/sourceos/nix-cache-aarch64-linux/nix-cache-info",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000002",
+        "sizeBytes": 0,
+        "contentType": "text/plain"
+      }
+    ],
+    "policy": {
+      "network": "restricted",
+      "diskWrite": "allowed",
+      "tokenRequired": false,
+      "allowedActions": ["fetch", "verify", "install", "rollback"]
+    },
+    "evidence": {
+      "correlationId": "builder-aarch64-dev-phase0",
+      "requiredReports": ["manifest-hash", "verification-result", "selected-channel", "install-result"]
+    },
+    "provenance": {
+      "builderId": "local-katello-sourceos-builder-aarch64",
+      "sourceRefs": [
+        "git:SociOS-Linux/source-os#main",
+        "katello:SocioProphet/sourceos-builder-aarch64/dev"
+      ],
+      "attestations": ["slsa"]
+    },
+    "trust": {
+      "model": "static-root",
+      "rootRef": "local-dev-trust-root",
+      "metadataRef": "local-dev-metadata"
+    },
+    "signature": {
+      "type": "minisign",
+      "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000010"
+    },
+    "antiRollback": {
+      "minimumVersion": "0.1.0",
+      "allowOfflineFallback": true,
+      "allowedRollbackRefs": []
+    },
+    "telemetry": {
+      "traceRequired": false,
+      "metricSet": ["boot-duration", "verify-duration", "download-bytes", "action-result"]
+    }
+  }
+}
