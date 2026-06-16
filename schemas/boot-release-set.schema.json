@@ -25,6 +25,32 @@
       "required": ["platforms", "channels", "artifacts", "policy", "evidence", "provenance", "trust", "signature", "antiRollback", "telemetry"],
       "properties": {
         "releaseSetRef": {"type": "string"},
+        "bootChain": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "enum": [
+                "asahi-m1n1-uboot-systemd-boot",
+                "uefi-systemd-boot",
+                "uefi-grub",
+                "coreboot",
+                "uboot-generic"
+              ]
+            },
+            "asahi": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "m1n1Version": {"type": "string"},
+                "ubootVersion": {"type": "string"},
+                "efiVarsMutable": {"type": "boolean"},
+                "rollbackTarget": {"type": ["string", "null"], "description": "NixOS store path of rollback generation; null when no prior generation exists"}
+              }
+            }
+          }
+        },
         "platforms": {"type": "array", "items": {"enum": ["apple-silicon", "uefi-x86_64", "uefi-aarch64", "generic-arm64"]}, "minItems": 1, "uniqueItems": true},
         "channels": {"type": "array", "items": {"enum": ["live", "installer", "recovery", "rollback", "rescue"]}, "minItems": 1, "uniqueItems": true},
         "artifacts": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["name", "role", "uri", "sha256"], "properties": {"name": {"type": "string"}, "role": {"enum": ["kernel", "initrd", "rootfs", "manifest", "bootloader", "recovery-image", "installer-data", "signature", "attestation", "tuf-metadata", "other"]}, "uri": {"type": "string", "format": "uri"}, "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}, "sizeBytes": {"type": "integer", "minimum": 0}, "contentType": {"type": "string"}}}},
