@@ -1,0 +1,25 @@
+{
+  "repo": "SourceOS-Linux/sourceos-boot",
+  "domain": "boot",
+  "specVersion": "0.1.0",
+  "ownedSchemas": [
+    "BootReleaseSet"
+  ],
+  "syncEngines": [],
+  "sourceChannels": [],
+  "policyClasses": [
+    "critical"
+  ],
+  "auditEvents": [
+    "boot.rollback.planned",
+    "boot.rollback.applied",
+    "boot.rollback.denied",
+    "boot.chain.validated"
+  ],
+  "dangerousSurfaces": [
+    "boot.efi_vars_mutable",
+    "boot.rollback.forced",
+    "boot.generation.deletion"
+  ],
+  "notes": "Asahi Linux boot chain model for Apple Silicon. efiVarsMutable must always be false — mutating EFI vars on M1/M2 can prevent macOS from booting."
+}
