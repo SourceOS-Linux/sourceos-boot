@@ -11,7 +11,9 @@ from pathlib import Path
 from typing import Any
 
 from .adapter import DeviceClaim, SourceOSBootAdapter
+from .asahi_boot_chain import AsahiBootChain, AsahiBootChainInfo, BOOT_CHAIN_TYPE
 from .control_plane import build_control_plane_boot_plan
+from .rollback_executor import RollbackExecutor
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -70,6 +72,34 @@ def plan_control_plane(args: argparse.Namespace) -> int:
     return 0
 
 
+def rollback_plan(args: argparse.Namespace) -> int:
+    chain_info = AsahiBootChainInfo(
+        chain_type=BOOT_CHAIN_TYPE,
+        m1n1_version=None,
+        uboot_version=None,
+        efi_vars_mutable=False,
+    )
+    chain = AsahiBootChain(chain_info=chain_info)
+    plan = chain.plan_rollback()
+    print(json.dumps(plan.to_dict(), indent=2, sort_keys=True))
+    return 0 if plan.allowed else 2
+
+
+def rollback_execute(args: argparse.Namespace) -> int:
+    chain_info = AsahiBootChainInfo(
+        chain_type=BOOT_CHAIN_TYPE,
+        m1n1_version=None,
+        uboot_version=None,
+        efi_vars_mutable=False,
+    )
+    chain = AsahiBootChain(chain_info=chain_info)
+    plan = chain.plan_rollback()
+    executor = RollbackExecutor(timeout_s=args.timeout)
+    result = executor.execute(plan, dry_run=not args.execute)
+    print(json.dumps(result.to_dict(), indent=2, sort_keys=True))
+    return 0 if result.ok else 2
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="SourceOS Boot helpers")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -91,6 +121,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     plan.add_argument("--boot-release-set", type=Path, required=True)
     plan.set_defaults(func=plan_control_plane)
+
+    rollback = subparsers.add_parser("rollback", help="NixOS generation rollback planning and execution")
+    rollback_sub = rollback.add_subparsers(dest="rollback_command", required=True)
+
+    rp = rollback_sub.add_parser("plan", help="emit a non-mutating AsahiRollbackPlan (no changes)")
+    rp.set_defaults(func=rollback_plan)
+
+    rx = rollback_sub.add_parser("execute", help="execute the rollback plan (dry-run unless --execute)")
+    rx.add_argument("--execute", action="store_true", help="actually run nixos-rebuild --rollback (default: dry-run)")
+    rx.add_argument("--timeout", type=int, default=300, help="subprocess timeout in seconds (default: 300)")
+    rx.set_defaults(func=rollback_execute)
+
     return parser
 
 
