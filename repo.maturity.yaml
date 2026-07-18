@@ -13,16 +13,10 @@ maturity:
     - schemas/boot-release-set.schema.json is the BootReleaseSet v1 contract.
     - examples/boot-release-set.example.json is a minimal valid fixture.
     - examples/nlboot/ contains nlboot manifest, token, and adapted-output fixtures.
-    - examples/m2-recovery-installer/normal-boot.example.json is a dry-run M2 normal boot BootReleaseSet fixture.
-    - examples/m2-recovery-installer/recovery-installer.example.json is a dry-run M2 Recovery/Installer BootReleaseSet fixture.
-    - docs/M2_RECOVERY_INSTALLER_PACKAGING.md defines packaging responsibilities, required inputs, and evidence model for both M2 entry types.
     - src/sourceos_boot/adapter.py implements the nlboot-to-BootReleaseSet adapter.
     - src/sourceos_boot/control_plane.py implements the control-plane boot plan builder.
-    - make validate exercises schema validation, M2 fixtures, nlboot adapter CLI path, and the new artifact-build-lane fixture.
+    - make validate exercises schema validation and the nlboot adapter CLI path.
     - python -m pytest passes all tests.
-    - docs/APPLE_SILICON_EVIDENCE_NORMALIZATION.md defines the normalization design for AppleSiliconAdapterEvidence into BootEvidence/BootProofRecord.
-    - examples/apple-silicon-evidence/raw-apple-silicon-evidence.example.json is a dry-run raw AppleSiliconAdapterEvidence fixture.
-    - examples/apple-silicon-evidence/normalized-boot-evidence.example.json is a dry-run normalized BootEvidence fixture showing the output of normalise_apple_silicon_evidence().
 validation:
   commands:
     - make validate
@@ -47,13 +41,9 @@ integrations:
     required: false
 nextActions:
   - Wire nlboot RSA-PSS/SHA-256 manifest signature verification into the adapter.
-  - Implement normalise_apple_silicon_evidence() in adapter.py (design doc in docs/APPLE_SILICON_EVIDENCE_NORMALIZATION.md; requires SEP integration review before host-mutating behavior).
+  - Add Apple Silicon M2 platform adaptation layer (PAL) design notes and stubs.
   - Add UEFI/iPXE PAL design notes for PC/Purism class hardware.
   - Align BootReleaseSet v1 with sourceos-spec once shared schemas land.
   - Add enrollment-token exchange stub with control-plane endpoint.
   - Add artifact digest verification and content-addressed cache path.
   - Emit evidence records from the boot/recovery execution boundary.
-  - Wire M2 packaging adapter to produce platform entrypoint descriptors from BootReleaseSet.
-  - Complete SBOM proof for NLBoot RC artifacts (sbomStatus is currently pending in artifact-build-lane fixture).
-  - Automate Sigstore/cosign signing of artifact-build-lane manifest once NLBoot RC is stable.
-  - Wire artifact-build-lane output into BootReleaseSet packaging step (spec.artifacts population from lane result).
