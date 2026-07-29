@@ -57,6 +57,31 @@ def adapt_nlboot(args: argparse.Namespace) -> int:
     return 0
 
 
+def plan_control_plane(args: argparse.Namespace) -> int:
+    """Render a ControlPlaneBootPlan from a BootReleaseSet document.
+
+    build_control_plane_boot_plan() existed in control_plane.py and was reachable from
+    nothing: the subcommand its test invokes was never registered, so `plan-control-plane`
+    exited 2 with "invalid choice". The planner was written; the door to it was not.
+
+    `execute` is stamped False here rather than in the dataclass because it is a property
+    of THIS invocation, not of the plan: every stage in this adapter is pure and
+    side-effect-free, and a planning call that could ever report execute=true would be a
+    different thing wearing the same name.
+    """
+    from sourceos_boot.control_plane import build_control_plane_boot_plan
+
+    doc = load_json(args.boot_release_set)
+    plan = build_control_plane_boot_plan(doc)
+    output = {
+        "apiVersion": "sourceos.dev/v1",
+        "kind": "ControlPlaneBootPlan",
+        "plan": {**plan.to_dict(), "execute": False},
+    }
+    print(json.dumps(output, indent=2, sort_keys=True))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="SourceOS Boot helpers")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -71,6 +96,10 @@ def build_parser() -> argparse.ArgumentParser:
     adapt.add_argument("--correlation-id", required=True)
     adapt.add_argument("--verification-result", choices=["pass", "fail", "unknown"], default="pass")
     adapt.set_defaults(func=adapt_nlboot)
+
+    plan_cp = subparsers.add_parser("plan-control-plane", help="Plan a control-plane boot from a BootReleaseSet")
+    plan_cp.add_argument("--boot-release-set", type=Path, required=True)
+    plan_cp.set_defaults(func=plan_control_plane)
     return parser
 
 

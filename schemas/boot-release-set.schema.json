@@ -4,37 +4,421 @@
   "title": "BootReleaseSet v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
   "properties": {
-    "apiVersion": {"const": "sourceos.dev/v1"},
-    "kind": {"const": "BootReleaseSet"},
+    "apiVersion": {
+      "const": "sourceos.dev/v1"
+    },
+    "kind": {
+      "const": "BootReleaseSet"
+    },
     "metadata": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "version", "createdAt"],
+      "required": [
+        "name",
+        "version",
+        "createdAt"
+      ],
       "properties": {
-        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]{1,62}$"},
-        "version": {"type": "string", "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+([-.+][A-Za-z0-9.-]+)?$"},
-        "createdAt": {"type": "string", "format": "date-time"},
-        "labels": {"type": "object", "additionalProperties": {"type": "string"}}
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{1,62}$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+([-.+][A-Za-z0-9.-]+)?$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
       }
     },
     "spec": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["platforms", "channels", "artifacts", "policy", "evidence", "provenance", "trust", "signature", "antiRollback", "telemetry"],
+      "required": [
+        "platforms",
+        "channels",
+        "artifacts",
+        "policy",
+        "evidence",
+        "provenance",
+        "trust",
+        "signature",
+        "antiRollback",
+        "telemetry"
+      ],
       "properties": {
-        "releaseSetRef": {"type": "string"},
-        "platforms": {"type": "array", "items": {"enum": ["apple-silicon", "uefi-x86_64", "uefi-aarch64", "generic-arm64"]}, "minItems": 1, "uniqueItems": true},
-        "channels": {"type": "array", "items": {"enum": ["live", "installer", "recovery", "rollback", "rescue"]}, "minItems": 1, "uniqueItems": true},
-        "artifacts": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["name", "role", "uri", "sha256"], "properties": {"name": {"type": "string"}, "role": {"enum": ["kernel", "initrd", "rootfs", "manifest", "bootloader", "recovery-image", "installer-data", "signature", "attestation", "tuf-metadata", "other"]}, "uri": {"type": "string", "format": "uri"}, "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}, "sizeBytes": {"type": "integer", "minimum": 0}, "contentType": {"type": "string"}}}},
-        "policy": {"type": "object", "additionalProperties": false, "required": ["network", "diskWrite", "tokenRequired", "allowedActions"], "properties": {"network": {"enum": ["none", "enrollment-only", "restricted", "full"]}, "diskWrite": {"enum": ["forbidden", "installer-only", "recovery-only", "allowed"]}, "tokenRequired": {"type": "boolean"}, "allowedActions": {"type": "array", "items": {"enum": ["announce", "enroll", "fetch", "verify", "kexec", "install", "rollback", "repair", "rekey", "attest"]}, "uniqueItems": true}}},
-        "evidence": {"type": "object", "additionalProperties": false, "required": ["requiredReports", "correlationId"], "properties": {"correlationId": {"type": "string"}, "requiredReports": {"type": "array", "items": {"enum": ["device-claim", "manifest-hash", "verification-result", "selected-channel", "boot-mode", "install-result", "rollback-result", "measurement", "attestation"]}, "uniqueItems": true}}},
-        "provenance": {"type": "object", "additionalProperties": false, "required": ["builderId", "sourceRefs", "attestations"], "properties": {"builderId": {"type": "string"}, "sourceRefs": {"type": "array", "items": {"type": "string"}, "minItems": 1}, "attestations": {"type": "array", "items": {"enum": ["slsa", "in-toto"]}, "minItems": 1, "uniqueItems": true}}},
-        "trust": {"type": "object", "additionalProperties": false, "required": ["model", "rootRef", "metadataRef"], "properties": {"model": {"enum": ["tuf", "uptane", "static-root"]}, "rootRef": {"type": "string"}, "metadataRef": {"type": "string"}, "threshold": {"type": "integer", "minimum": 1}}},
-        "signature": {"type": "object", "additionalProperties": false, "required": ["type", "digest"], "properties": {"type": {"enum": ["sigstore", "cosign", "minisign", "x509", "other"]}, "bundleRef": {"type": "string"}, "digest": {"type": "string", "pattern": "^sha256:[a-fA-F0-9]{64}$"}}},
-        "antiRollback": {"type": "object", "additionalProperties": false, "required": ["minimumVersion", "allowOfflineFallback"], "properties": {"minimumVersion": {"type": "string"}, "allowOfflineFallback": {"type": "boolean"}, "allowedRollbackRefs": {"type": "array", "items": {"type": "string"}}}},
-        "telemetry": {"type": "object", "additionalProperties": false, "required": ["traceRequired", "metricSet"], "properties": {"traceRequired": {"type": "boolean"}, "metricSet": {"type": "array", "items": {"enum": ["boot-duration", "verify-duration", "download-bytes", "action-result"]}, "uniqueItems": true}}}
+        "releaseSetRef": {
+          "type": "string"
+        },
+        "platforms": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "apple-silicon",
+              "uefi-x86_64",
+              "uefi-aarch64",
+              "generic-arm64"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "live",
+              "installer",
+              "recovery",
+              "rollback",
+              "rescue"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "role",
+              "uri",
+              "sha256"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "role": {
+                "enum": [
+                  "kernel",
+                  "initrd",
+                  "rootfs",
+                  "manifest",
+                  "bootloader",
+                  "recovery-image",
+                  "installer-data",
+                  "signature",
+                  "attestation",
+                  "tuf-metadata",
+                  "other"
+                ]
+              },
+              "uri": {
+                "type": "string",
+                "format": "uri"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-fA-F0-9]{64}$"
+              },
+              "sizeBytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "contentType": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "network",
+            "diskWrite",
+            "tokenRequired",
+            "allowedActions"
+          ],
+          "properties": {
+            "network": {
+              "enum": [
+                "none",
+                "enrollment-only",
+                "restricted",
+                "full"
+              ]
+            },
+            "diskWrite": {
+              "enum": [
+                "forbidden",
+                "installer-only",
+                "recovery-only",
+                "allowed"
+              ]
+            },
+            "tokenRequired": {
+              "type": "boolean"
+            },
+            "allowedActions": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "announce",
+                  "enroll",
+                  "fetch",
+                  "verify",
+                  "kexec",
+                  "install",
+                  "rollback",
+                  "repair",
+                  "rekey",
+                  "attest"
+                ]
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "requiredReports",
+            "correlationId"
+          ],
+          "properties": {
+            "correlationId": {
+              "type": "string"
+            },
+            "requiredReports": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "device-claim",
+                  "manifest-hash",
+                  "verification-result",
+                  "selected-channel",
+                  "boot-mode",
+                  "install-result",
+                  "rollback-result",
+                  "measurement",
+                  "attestation"
+                ]
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "builderId",
+            "sourceRefs",
+            "attestations"
+          ],
+          "properties": {
+            "builderId": {
+              "type": "string"
+            },
+            "sourceRefs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "attestations": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "slsa",
+                  "in-toto"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          }
+        },
+        "trust": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "model",
+            "rootRef",
+            "metadataRef"
+          ],
+          "properties": {
+            "model": {
+              "enum": [
+                "tuf",
+                "uptane",
+                "static-root"
+              ]
+            },
+            "rootRef": {
+              "type": "string"
+            },
+            "metadataRef": {
+              "type": "string"
+            },
+            "threshold": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "signature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "digest"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "sigstore",
+                "cosign",
+                "minisign",
+                "x509",
+                "other"
+              ]
+            },
+            "bundleRef": {
+              "type": "string"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[a-fA-F0-9]{64}$"
+            }
+          }
+        },
+        "antiRollback": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "minimumVersion",
+            "allowOfflineFallback"
+          ],
+          "properties": {
+            "minimumVersion": {
+              "type": "string"
+            },
+            "allowOfflineFallback": {
+              "type": "boolean"
+            },
+            "allowedRollbackRefs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "telemetry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "traceRequired",
+            "metricSet"
+          ],
+          "properties": {
+            "traceRequired": {
+              "type": "boolean"
+            },
+            "metricSet": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "boot-duration",
+                  "verify-duration",
+                  "download-bytes",
+                  "action-result"
+                ]
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "bootChain": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "How this release set boots: the chain type, plus the parameters that chain needs. Optional \u2014 a release set that does not pin a boot chain simply omits it \u2014 but a declared chain must carry the parameters that make it actionable, which is why the asahi block is conditionally required rather than merely allowed.",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "asahi-m1n1-uboot-systemd-boot",
+                "uefi-systemd-boot"
+              ]
+            },
+            "asahi": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Apple-silicon chain parameters (m1n1 \u2192 U-Boot \u2192 systemd-boot).",
+              "required": [
+                "m1n1Version",
+                "ubootVersion",
+                "efiVarsMutable"
+              ],
+              "properties": {
+                "m1n1Version": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "ubootVersion": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "efiVarsMutable": {
+                  "type": "boolean",
+                  "description": "EFI variables writable at runtime. Declared here because boot.efi_vars_mutable is a dangerous surface in .sourceos/manifest.json."
+                },
+                "rollbackTarget": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Generation to roll back to, or null when no target is pinned."
+                }
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "const": "asahi-m1n1-uboot-systemd-boot"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "asahi"
+                ]
+              }
+            }
+          ]
+        }
       }
     }
   }
