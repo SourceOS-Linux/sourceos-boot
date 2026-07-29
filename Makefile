@@ -1,4 +1,4 @@
-.PHONY: validate test
+.PHONY: validate validate-manifest-declarations test
 
 validate:
 	python src/sourceos_boot/validate_boot_release_set.py examples/boot-release-set.example.json
