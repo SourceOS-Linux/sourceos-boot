@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from .adapter import DeviceClaim, SourceOSBootAdapter
+from .asahi_boot_chain import AsahiBootChain, AsahiBootChainInfo, BOOT_CHAIN_TYPE
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -215,9 +216,66 @@ def ab_update_replay(args: argparse.Namespace) -> int:
     return 0
 
 
+def _asahi_chain() -> AsahiBootChain:
+    """The chain the rollback path plans against.
+
+    Restored from bc6dd8c unchanged: rollback is a NixOS-generation operation, so the
+    chain metadata it needs is only the type — m1n1/u-boot versions are irrelevant to
+    `nixos-rebuild --rollback` and EFI vars are not touched.
+    """
+    return AsahiBootChain(
+        chain_info=AsahiBootChainInfo(
+            chain_type=BOOT_CHAIN_TYPE,
+            m1n1_version=None,
+            uboot_version=None,
+            efi_vars_mutable=False,
+        )
+    )
+
+
+def rollback_plan(args: argparse.Namespace) -> int:
+    plan = _asahi_chain().plan_rollback()
+    print(json.dumps(plan.to_dict(), indent=2, sort_keys=True))
+    return 0 if plan.allowed else 2
+
+
+def rollback_execute(args: argparse.Namespace) -> int:
+    plan = _asahi_chain().plan_rollback()
+    executor = RollbackExecutor(timeout_s=args.timeout)
+    result = executor.execute(plan, dry_run=not args.execute)
+    print(json.dumps(result.to_dict(), indent=2, sort_keys=True))
+    return 0 if result.ok else 2
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="SourceOS Boot helpers")
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # ── rollback ────────────────────────────────────────────────────────────────────
+    # RESTORED. This subcommand existed at bc6dd8c ("feat(rollback): RollbackExecutor and
+    # CLI execute path", #28) and was dropped by 1f679d2 (#48) while the executor library
+    # it fronts stayed. source-os/modules/nixos/sourceos-syncd/default.nix invokes
+    # `sourceos-boot rollback execute --execute` under `rollbackOnFailure`, so on main this
+    # became argparse "invalid choice: 'rollback'" (exit 2) — swallowed by a trailing
+    # `|| true`. Auto-rollback survived only because source-os/flake.lock pins
+    # sourceos-boot-src to bc6dd8c, the commit immediately before the removal; the next
+    # `nix flake update` would have silently disarmed it on stable-x86_64, canary-x86_64,
+    # exit-x86_64 and builder-aarch64 — all of which set rollbackOnFailure = true.
+    #
+    # Nothing caught it: packages/sourceos-boot/default.nix sets doCheck = false, and its
+    # pythonImportsCheck imports `sourceos_boot.rollback_executor` as a MODULE — which still
+    # exists — so the package built green while its CLI surface had a hole. Proving a module
+    # imports can never prove a subcommand parses; see tests/test_cli_rollback.py.
+    rollback = subparsers.add_parser("rollback", help="NixOS generation rollback planning and execution")
+    rollback_sub = rollback.add_subparsers(dest="rollback_command", required=True)
+
+    rp = rollback_sub.add_parser("plan", help="emit a non-mutating AsahiRollbackPlan (no changes)")
+    rp.set_defaults(func=rollback_plan)
+
+    rx = rollback_sub.add_parser("execute", help="execute the rollback plan (dry-run unless --execute)")
+    rx.add_argument("--execute", action="store_true", help="actually run nixos-rebuild --rollback (default: dry-run)")
+    rx.add_argument("--timeout", type=int, default=300, help="seconds to allow nixos-rebuild (default: 300)")
+    rx.set_defaults(func=rollback_execute)
 
     adapt = subparsers.add_parser("adapt-nlboot", help="Convert nlboot manifest/token JSON into SourceOS handoff objects")
     adapt.add_argument("--manifest", type=Path, required=True)
