@@ -21,5 +21,5 @@
     "boot.rollback.forced",
     "boot.generation.deletion"
   ],
-  "notes": "Asahi Linux boot chain model for Apple Silicon. efiVarsMutable must always be false — mutating EFI vars on M1/M2 can prevent macOS from booting."
+  "notes": "Asahi Linux boot chain model for Apple Silicon. efiVarsMutable must always be false \u2014 mutating EFI vars on M1/M2 can prevent macOS from booting."
 }
