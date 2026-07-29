@@ -1,0 +1,18 @@
+[
+  {
+    "event": "begin",
+    "payloadDigest": "sha256:9da88dc197887a52961b7846083b868e0a2e4ed0f1846abdfa6e9f4d566c66d0",
+    "payloadRef": "urn:srcos:image:sourceos_node_2026.07.4",
+    "version": "2026.07.4"
+  },
+  {
+    "event": "write_complete",
+    "observedDigest": "sha256:9da88dc197887a52961b7846083b868e0a2e4ed0f1846abdfa6e9f4d566c66d0"
+  },
+  { "event": "arm" },
+  { "event": "boot_attempt" },
+  {
+    "event": "probe_pass",
+    "detail": "All five blocking checks passed on two consecutive sweeps, satisfying minConsecutivePasses."
+  }
+]

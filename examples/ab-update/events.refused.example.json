@@ -1,0 +1,28 @@
+[
+  {
+    "event": "begin",
+    "payloadDigest": "sha256:9da88dc197887a52961b7846083b868e0a2e4ed0f1846abdfa6e9f4d566c66d0",
+    "payloadRef": "urn:srcos:image:sourceos_node_2026.07.4",
+    "version": "2026.07.4"
+  },
+  {
+    "event": "write_complete",
+    "observedDigest": "sha256:9da88dc197887a52961b7846083b868e0a2e4ed0f1846abdfa6e9f4d566c66d0"
+  },
+  { "event": "arm" },
+  { "event": "boot_attempt" },
+  {
+    "event": "probe_fail",
+    "detail": "control-plane-reachable failed: no successful control-plane call within the 180s probe window."
+  },
+  { "event": "boot_attempt" },
+  {
+    "event": "watchdog_expired",
+    "detail": "software watchdog expired after 90s without a pet.",
+    "expiryAction": "reboot"
+  },
+  {
+    "event": "boot_attempt",
+    "detail": "A caller retrying after refusal. The machine must decline this — declining it is what ends the boot loop."
+  }
+]

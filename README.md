@@ -73,6 +73,51 @@ This repo currently provides:
 - `src/sourceos_boot/validate_trust_chain_boot_verification.py` — Trust Chain boot verification validator.
 - `.github/workflows/ci.yml` — validation workflow.
 
+### A/B dual-slot update
+
+Reference implementation of the `sourceos-spec` A/B fallback update contract
+v0.1 — the estate's first update path with a guaranteed way back.
+
+- `src/sourceos_boot/ab_update_machine.py` — the state machine. Explicit
+  allowed-transition table, fail-closed admission, GPT-style attempt budget, and
+  the rollback paths. Zero-dependency, pure stdlib, side-effect free.
+- `schemas/ab-update/` — the three contract schemas, vendored from
+  `sourceos-spec` (see that directory's README; never edit them here).
+- `examples/ab-update/` — a slot pair, a health probe, and two event sequences
+  (one settling `refused`, one `promoted`).
+- `tests/test_ab_update_machine.py`, `tests/test_ab_update_conformance.py` —
+  the transitions and rollback paths, plus validation of every emitted document
+  against the vendored schemas.
+
+The invariant it exists for: **the currently-good slot is never overwritten by
+the update being applied.** The write target is derived from the current slot
+roles inside the machine — there is no argument by which a caller could aim an
+update at the slot the target falls back to — and `InvariantViolation` is raised,
+not returned, if the preserved payload ever changes.
+
+```sh
+# Plan an update: opens a transaction against the non-active slot. Pure.
+sourceos-boot ab-update plan \
+  --slots examples/ab-update/slots.example.json \
+  --probe examples/ab-update/health-probe.example.json \
+  --transaction-id urn:srcos:update-transaction:fog_edge_07_0042 \
+  --payload-digest sha256:<digest> --version 2026.07.4
+
+# Rollback drill: replay recorded events, emit the settled contract documents.
+sourceos-boot ab-update replay \
+  --slots examples/ab-update/slots.example.json \
+  --probe examples/ab-update/health-probe.example.json \
+  --transaction-id urn:srcos:update-transaction:fog_edge_07_0042 \
+  --events examples/ab-update/events.refused.example.json
+```
+
+Both subcommands recompute the health probe's `definitionDigest` from its own
+checks and refuse a stale one, so a gate cannot be relaxed after it is pinned
+without the command noticing.
+
+**Not implemented here:** the GRUB slot selector and the A/B partition layout.
+Those live in `source-os` and are not verifiable without booting a machine.
+
 ## Near-term roadmap
 
 1. Align BootReleaseSet v0 with `sourceos-spec` once the shared schema family lands.
